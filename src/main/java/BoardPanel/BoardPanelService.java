@@ -12,9 +12,11 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
     private Tile[][] tiles;
     private Tetris tetris;
 
-    BoardPanelSettings(Tetris tetris) {
+    public BoardPanelService(Tetris tetris) {
         this.tetris = tetris;
-
+        this.tiles = new Tile[BoardPanelSettings.ROW_COUNT][BoardPanelSettings.COL_COUNT];
+        setPreferredSize(new Dimension(BoardPanelSettings.PANEL_WIDTH, BoardPanelSettings.PANEL_HEIGHT));
+        setBackground(Color.BLACK);
     }
 
     public void clear(){
