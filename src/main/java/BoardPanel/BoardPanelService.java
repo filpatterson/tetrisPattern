@@ -2,6 +2,7 @@ package BoardPanel;
 
 import java.awt.*;
 import Tile.Tile;
+import Tetris.Tetris;
 
 import javax.swing.*;
 

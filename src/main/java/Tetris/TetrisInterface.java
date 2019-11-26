@@ -47,6 +47,12 @@ public interface TetrisInterface {
     Boolean isGameOver();
 
     /**
+     * Checks if this is new game or not
+     * @return Is this new game or not
+     */
+    Boolean isNewGame();
+
+    /**
      * Get current level of game
      * @return Current level of game
      */

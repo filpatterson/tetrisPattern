@@ -3,10 +3,15 @@ package Tetris;
 import BoardPanel.BoardPanelService;
 import Tile.Tile;
 
+import javax.swing.*;
 import java.time.Clock;
 import java.util.Random;
 
-public class TetrisSettings {
+public class TetrisSettings extends JFrame {
+
+    TetrisSettings(String line) {
+        super(line);
+    }
     /**
      * How many milliseconds it takes per frame
      */
@@ -28,9 +33,14 @@ public class TetrisSettings {
     private SidePanel side;
 
     /**
-     * Is game paused or not
+     * Is game over or not
      */
     private Boolean isGameOver;
+
+    /**
+     * Is game paused or not
+     */
+    private Boolean isPaused;
 
     /**
      * Checks if game was played (becomes false automatically when game starts
@@ -219,4 +229,8 @@ public class TetrisSettings {
     public void setGameSpeed(Float gameSpeed) {
         this.gameSpeed = gameSpeed;
     }
+
+    public Boolean getPaused() { return isPaused; }
+
+    public void setPaused(Boolean paused) { isPaused = paused; }
 }
