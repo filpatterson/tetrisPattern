@@ -6,14 +6,14 @@ import BoardPanel.BoardPanelSettings;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.time.Clock;
+import Clock.Clock;
 import java.util.Random;
 import Tile.Tile;
 
 public class Tetris extends TetrisSettings implements TetrisInterface {
     private TetrisSettings game = new Tetris();
 
-    void startGame() {
+    public void startGame() {
         //initialize random number generator
         game.setRandom(new Random());
         game.setNewGame(true);
@@ -53,7 +53,7 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
         }
     }
 
-    void updateGame(){
+     public void updateGame(){
         if(game.getBoardPanelService().isValidAndEmpty(game.getTile(), game.getCurrentColumn(),
                 game.getCurrentRow() + 1, game.getCurrentRotation())) {
             //increment the tile down if it can be done
@@ -84,12 +84,12 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
         }
     }
 
-    void renderGame(){
+     public void renderGame(){
         game.getBoardPanelService().repaint();
         game.getSide().repaint();
     }
 
-    void resetGame(){
+     public void resetGame(){
         game.setLevel(1);
         game.setScore(0);
         game.setGameSpeed(1.0f);
@@ -102,7 +102,7 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
         spawnTile();
     }
 
-    void spawnTile(){
+     public void spawnTile(){
         //reset position and rotation for spawn of new tile, pick the next tile to work with
         game.setTile(game.getNextTile());
         game.setCurrentColumn(game.getTile().getSpawnColumn());
@@ -117,7 +117,7 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
         }
     }
 
-    void rotateTile(Integer newRotation){
+     public void rotateTile(Integer newRotation){
         //sometimes there is need of moving tile so that it will not clip out from board
         Integer newColumn = game.getCurrentColumn();
         Integer newRow = game.getCurrentRow();
@@ -150,23 +150,23 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
         }
     }
 
-    Boolean isPaused(){ return game.getPaused(); }
+    public Boolean isPaused(){ return game.getPaused(); }
 
-    Boolean isGameOver() { return game.getGameOver(); }
+    public Boolean isGameOver() { return game.getGameOver(); }
 
-    Boolean isNewGame() { return game.getNewGame(); }
+    public Boolean isNewGame() { return game.getNewGame(); }
 
-    Integer getScore() { return game.getScore(); }
+    public Integer getScore() { return game.getScore(); }
 
-    Integer getLevel() { return game.getLevel(); }
+    public Integer getLevel() { return game.getLevel(); }
 
-    Tile getNextTile() { return game.getNextTile(); }
+    public Tile getNextTile() { return game.getNextTile(); }
 
-    Integer getTileColumn() { return game.getCurrentColumn(); }
+    public Integer getTileColumn() { return game.getCurrentColumn(); }
 
-    Integer getTileRow() { return game.getCurrentRow(); }
+    public Integer getTileRow() { return game.getCurrentRow(); }
 
-    Integer getTileRotation() { return game.getCurrentRotation(); }
+    public Integer getTileRotation() { return game.getCurrentRotation(); }
 
     private Tetris() {
         //set basic properties of window
@@ -243,7 +243,7 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
             }
 
             @Override
-            void keyReleased(KeyEvent e) {
+            public void keyReleased(KeyEvent e) {
                 switch(e.getKeyCode()){
                     //when key is released set speed of the logic timer back to current game speed and clear cycles that
                     //might still been elapsed

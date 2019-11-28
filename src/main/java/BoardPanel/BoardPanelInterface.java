@@ -3,7 +3,7 @@ package BoardPanel;
 import java.awt.*;
 import Tile.Tile;
 
-public interface BoardPanelInterface {
+interface BoardPanelInterface {
 
     /**
      * Resets the board and clears away all tiles

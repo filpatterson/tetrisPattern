@@ -4,7 +4,7 @@ import BoardPanel.BoardPanelService;
 import Tile.Tile;
 
 import javax.swing.*;
-import java.time.Clock;
+import Clock.Clock;
 import java.util.Random;
 
 public class TetrisSettings extends JFrame {

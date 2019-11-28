@@ -81,7 +81,7 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
 
     public Boolean isOccupied(Integer x, Integer y) { return tiles[y][x] != null; }
 
-    public void setTile(Integer x, Integer y, Tile tile) { tiles[y][x] = tile}
+    public void setTile(Integer x, Integer y, Tile tile) { tiles[y][x] = tile; }
 
     public Tile getTile(Integer x, Integer y) { return tiles[y][x]; }
 
@@ -107,7 +107,7 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
             g.drawString(msg, BoardPanelSettings.CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 150);
             g.setFont(BoardPanelSettings.SMALL_FONT);
             msg = "Press Enter to play" + (tetris.isNewGame() ? "" : " Again");
-            g.drawString(msg, BoardPanelSettings.Center_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
+            g.drawString(msg, BoardPanelSettings.CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
         } else {
             // draw pieces of tile on board
 
@@ -120,7 +120,7 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
                 }
 
             // draw separately current tile (evade process of redrawing entire board)
-            Tile tile = tetris.getTileType();
+            Tile tile = tetris.getTile();
             Integer tileCol = tetris.getTileColumn();
             Integer tileRow = tetris.getTileRow();
             Integer rotation = tetris.getTileRotation();
