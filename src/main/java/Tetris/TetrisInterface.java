@@ -32,31 +32,31 @@ public interface TetrisInterface {
      * Makes rotation of tile and checks if it is possible considering other tiles and edges of game
      * @param newRotation New value for rotation of figure
      */
-    void rotateTile(Integer newRotation);
+    void rotateTile(int newRotation);
 
     /**
      * Checks if game is paused
      * @return Is game paused or not
      */
-    Boolean isPaused();
+    boolean isPaused();
 
     /**
      * Checks if game is over
      * @return Is game over or not
      */
-    Boolean isGameOver();
+    boolean isGameOver();
 
     /**
      * Checks if this is new game or not
      * @return Is this new game or not
      */
-    Boolean isNewGame();
+    boolean isNewGame();
 
     /**
      * Get current level of game
      * @return Current level of game
      */
-    Integer getLevel();
+    int getLevel();
 
     /**
      * Get next tile that will be spawned
@@ -68,17 +68,17 @@ public interface TetrisInterface {
      * Get current column of tile
      * @return Current column of tile
      */
-    Integer getTileColumn();
+    int getTileColumn();
 
     /**
      * Get current row of tile
      * @return Current row of tile
      */
-    Integer getTileRow();
+    int getTileRow();
 
     /**
      * Get current rotation of tile
      * @return Current rotation of tile
      */
-    Integer getTileRotation();
+    int getTileRotation();
 }

@@ -153,7 +153,7 @@ public class Tetris extends JFrame implements TetrisInterface {
             boardPanelService.addPiece(tile, currentColumn, currentRow, currentRotation);
 
             //game checks if there are cleared lines after setting tile and calculates score for player
-            Integer cleared = boardPanelService.checkLines();
+            int cleared = boardPanelService.checkLines();
             if(cleared > 0)
                 score = score + 50 << cleared;
 
@@ -206,7 +206,7 @@ public class Tetris extends JFrame implements TetrisInterface {
         }
     }
 
-     public void rotateTile(Integer newRotation){
+     public void rotateTile(int newRotation){
         //sometimes there is need of moving tile so that it will not clip out from board
         int newColumn = currentColumn;
         int newRow = currentRow;
@@ -238,23 +238,23 @@ public class Tetris extends JFrame implements TetrisInterface {
          }
     }
 
-    public Boolean isPaused(){ return isPaused; }
+    public boolean isPaused(){ return isPaused; }
 
-    public Boolean isGameOver() { return isGameOver; }
+    public boolean isGameOver() { return isGameOver; }
 
-    public Boolean isNewGame() { return isNewGame; }
+    public boolean isNewGame() { return isNewGame; }
 
-    public Integer getScore() { return score; }
+    public int getScore() { return score; }
 
-    public Integer getLevel() { return level; }
+    public int getLevel() { return level; }
 
     public Tile getNextTile() { return nextTile; }
 
-    public Integer getTileColumn() { return currentColumn; }
+    public int getTileColumn() { return currentColumn; }
 
-    public Integer getTileRow() { return currentRow; }
+    public int getTileRow() { return currentRow; }
 
-    public Integer getTileRotation() { return currentRotation; }
+    public int getTileRotation() { return currentRotation; }
 
     public Tile getTile() { return tile; }
 
@@ -288,13 +288,15 @@ public class Tetris extends JFrame implements TetrisInterface {
 
                     //move tile left if there is free space from the left side
                     case KeyEvent.VK_A:
-                        if(!isPaused() && boardPanelService.isValidAndEmpty(tile, currentColumn - 1, currentRow, currentRotation))
+                        if(!isPaused() && boardPanelService.isValidAndEmpty(tile, currentColumn - 1, currentRow,
+                                currentRotation))
                             currentColumn = currentColumn - 1;
                         break;
 
                     //move tile right if there is free space from the right side
                     case KeyEvent.VK_D:
-                        if(!isPaused() && boardPanelService.isValidAndEmpty(tile, currentColumn + 1, currentRow, currentRotation))
+                        if(!isPaused() && boardPanelService.isValidAndEmpty(tile, currentColumn + 1, currentRow,
+                                currentRotation))
                             currentColumn = currentColumn + 1;
                         break;
 

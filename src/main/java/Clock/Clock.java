@@ -4,34 +4,34 @@ public class Clock implements ClockInterface {
     /**
      * Amount of milliseconds per one cycle
      */
-    private Float millisPerCycle = 0.0f;
+    private float millisPerCycle = 0.0f;
 
     /**
      * The last time when the clock was updated (used for calculation of delta time)
      */
-    private Long lastUpdate = 0L;
+    private long lastUpdate = 0L;
 
     /**
      * Amount of cycles that have elapsed and haven't been polled
      */
-    private Integer elapsedCycles = 0;
+    private int elapsedCycles = 0;
 
     /**
      * Amount of time towards the next elapsed cycle
      */
-    private Float excessCycles = 0.0f;
+    private float excessCycles = 0.0f;
 
     /**
      * Is game paused or not
      */
-    private Boolean isPaused = false;
+    private boolean isPaused = false;
 
-    public Clock(Float cyclesPerSecond){
+    public Clock(float cyclesPerSecond){
         setCyclesPerSecond(cyclesPerSecond);
         reset();
     }
 
-    public void setCyclesPerSecond(Float cyclesPerSecond) { this.millisPerCycle = (1.0f / cyclesPerSecond) * 1000; }
+    public void setCyclesPerSecond(float cyclesPerSecond) { this.millisPerCycle = (1.0f / cyclesPerSecond) * 1000; }
 
     public void reset() {
         this.elapsedCycles = 0;
@@ -42,8 +42,8 @@ public class Clock implements ClockInterface {
 
     public void update(){
         //get current time and calculate delta time
-        Long currentUpdate = getCurrentTime();
-        Float delta = (float)(currentUpdate - lastUpdate) + excessCycles;
+        long currentUpdate = getCurrentTime();
+        float delta = (float)(currentUpdate - lastUpdate) + excessCycles;
 
         //update amount of elapsed cycles and excess cycles if game is not paused
         if(!isPaused) {
@@ -55,15 +55,15 @@ public class Clock implements ClockInterface {
         this.lastUpdate = currentUpdate;
     }
 
-    public void setPaused(Boolean paused){
+    public void setPaused(boolean paused){
         this.isPaused = paused;
     }
 
-    public Boolean isPaused(){
+    public boolean isPaused(){
         return this.isPaused;
     }
 
-    public Boolean hasElapsedCycle(){
+    public boolean hasElapsedCycle(){
         if(elapsedCycles > 0){
             elapsedCycles--;
             return true;
@@ -71,11 +71,11 @@ public class Clock implements ClockInterface {
         return false;
     }
 
-    public Boolean peekElapsedCycle(){
+    public boolean peekElapsedCycle(){
         return (elapsedCycles > 0);
     }
 
-    public static final Long getCurrentTime(){
+    public static long getCurrentTime(){
         return (System.nanoTime() / 1000000L);
     }
 }

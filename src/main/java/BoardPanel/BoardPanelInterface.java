@@ -18,7 +18,7 @@ interface BoardPanelInterface {
      * @param rotation Rotation of tile
      * @return Is position on those coordinates valid or not
      */
-    Boolean isValidAndEmpty(Tile type, Integer x, Integer y, Integer rotation);
+    boolean isValidAndEmpty(Tile type, int x, int y, int rotation);
 
     /**
      * Adds a tile on game board. Can overwrite existing tiles.
@@ -27,20 +27,20 @@ interface BoardPanelInterface {
      * @param y Coordinate at Y-axis
      * @param rotation Rotation of tile
      */
-    void addPiece(Tile type, Integer x, Integer y, Integer rotation);
+    void addPiece(Tile type, int x, int y, int rotation);
 
     /**
      * Checks all lines if there are any ones cleared and removes them from game
      * @return Amount of lines that were cleared
      */
-    Integer checkLines();
+    int checkLines();
 
     /**
      * Checks if line is full
      * @param line Index of row to check
      * @return Is current row full or not
      */
-    Boolean checkLine(Integer line);
+    boolean checkLine(int line);
 
     /**
      * Check if the tile is already occupied
@@ -48,7 +48,7 @@ interface BoardPanelInterface {
      * @param y Coordinate at Y-axis to check
      * @return Is current position occupied or not
      */
-    Boolean isOccupied(Integer x, Integer y);
+    boolean isOccupied(int x, int y);
 
     /**
      * Sets a tile on required column and row on game board
@@ -56,7 +56,7 @@ interface BoardPanelInterface {
      * @param y The row where tile needs to be placed
      * @param type Type of tile to set
      */
-    void setTile(Integer x, Integer y, Tile type);
+    void setTile(int x, int y, Tile type);
 
     /**
      * Gets tile by it's column and row
@@ -64,13 +64,7 @@ interface BoardPanelInterface {
      * @param y Row
      * @return Tile placed at requested column and row
      */
-    Tile getTile(Integer x, Integer y);
-
-    /**
-     * Element for drawing all elements of game
-     * @param g
-     */
-    void paintComponent(Graphics g);
+    Tile getTile(int x, int y);
 
     /**
      * Draws specific tile on board
@@ -79,7 +73,7 @@ interface BoardPanelInterface {
      * @param y The row where to draw a tile
      * @param g Graphics object
      */
-    void drawTile(Tile type, Integer x, Integer y, Graphics g);
+    void drawTile(Tile type, int x, int y, Graphics g);
 
     /**
      * Draw a tile on board setting color for tile
@@ -90,5 +84,5 @@ interface BoardPanelInterface {
      * @param y Row
      * @param g Graphics object
      */
-    void drawTile(Color base, Color light, Color dark, Integer x, Integer y, Graphics g);
+    void drawTile(Color base, Color light, Color dark, int x, int y, Graphics g);
 }

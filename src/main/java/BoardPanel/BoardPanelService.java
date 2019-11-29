@@ -16,17 +16,19 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
     public BoardPanelService(Tetris tetris) {
         this.tetris = tetris;
         this.tiles = new Tile[BoardPanelSettings.ROW_COUNT][BoardPanelSettings.COL_COUNT];
+
         setPreferredSize(new Dimension(BoardPanelSettings.PANEL_WIDTH, BoardPanelSettings.PANEL_HEIGHT));
         setBackground(Color.BLACK);
     }
 
     public void clear(){
+        //loop through all board to clear it from any elements
         for(int i = 0; i < BoardPanelSettings.ROW_COUNT; i++)
             for(int j = 0; j < BoardPanelSettings.COL_COUNT; j++)
                 tiles[i][j] = null;
     }
 
-    public Boolean isValidAndEmpty(Tile tile, Integer x, Integer y, Integer rotation) {
+    public boolean isValidAndEmpty(Tile tile, int x, int y, int rotation) {
         //make sure that column for placing tile is valid
         if(x < -tile.getLeftInsert(rotation)
                 || x + tile.getDimension() - tile.getRightInsert(rotation) >= BoardPanelSettings.COL_COUNT)
@@ -46,7 +48,7 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
         return true;
     }
 
-    public void addPiece(Tile tile, Integer x, Integer y, Integer rotation) {
+    public void addPiece(Tile tile, int x, int y, int rotation) {
         //  loop through all pieces of tile and add them to the board only if boolean that represents that piece is set
         //to true
         for(int col = 0; col < tile.getDimension(); col++)
@@ -55,8 +57,8 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
                     setTile(col + x, row + y, tile);
     }
 
-    public Integer checkLines() {
-        Integer completedLines = 0;
+    public int checkLines() {
+        int completedLines = 0;
 
         for(int row = 0; row < BoardPanelSettings.ROW_COUNT; row++)
             if(checkLine(row))
@@ -65,10 +67,10 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
         return completedLines;
     }
 
-    public Boolean checkLine(Integer line) {
+    public boolean checkLine(int line) {
         // make sure that current line is not full
         for(int col = 0; col < BoardPanelSettings.COL_COUNT; col++)
-            if(isOccupied(col, line))
+            if(!isOccupied(col, line))
                 return false;
 
         // if game founds out that there is filled line then this line needs to be removed
@@ -79,12 +81,16 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
         return true;
     }
 
-    public Boolean isOccupied(Integer x, Integer y) { return tiles[y][x] != null; }
+    public boolean isOccupied(int x, int y) { return tiles[y][x] != null; }
 
-    public void setTile(Integer x, Integer y, Tile tile) { tiles[y][x] = tile; }
+    public void setTile(int x, int y, Tile tile) { tiles[y][x] = tile; }
 
-    public Tile getTile(Integer x, Integer y) { return tiles[y][x]; }
+    public Tile getTile(int x, int y) { return tiles[y][x]; }
 
+    /**
+     * Drawing elements for main panel of game
+     * @param g Graphics instance
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -109,8 +115,8 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
             msg = "Press Enter to play" + (tetris.isNewGame() ? "" : " Again");
             g.drawString(msg, BoardPanelSettings.CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
         } else {
-            // draw pieces of tile on board
 
+            // draw pieces of tile on board
             for(int x = 0; x < BoardPanelSettings.COL_COUNT; x++)
                 for(int y = BoardPanelSettings.HIDDEN_ROW_COUNT; y < BoardPanelSettings.ROW_COUNT; y++) {
                     Tile tile = getTile(x, y);
@@ -121,9 +127,9 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
 
             // draw separately current tile (evade process of redrawing entire board)
             Tile tile = tetris.getTile();
-            Integer tileCol = tetris.getTileColumn();
-            Integer tileRow = tetris.getTileRow();
-            Integer rotation = tetris.getTileRotation();
+            int tileCol = tetris.getTileColumn();
+            int tileRow = tetris.getTileRow();
+            int rotation = tetris.getTileRotation();
             for(int col = 0; col < tile.getDimension(); col++)
                 for(int row = 0; row < tile.getDimension(); row++)
                     if(tileRow + row >= 2 && tile.isTile(col, row, rotation))
@@ -181,11 +187,11 @@ public class BoardPanelService extends JPanel implements BoardPanelInterface{
                 BoardPanelSettings.TILE_SIZE_PIXELS * BoardPanelSettings.VISIBLE_ROW_COUNT);
     }
 
-    public void drawTile(Tile tile, Integer x, Integer y, Graphics g) {
+    public void drawTile(Tile tile, int x, int y, Graphics g) {
         drawTile(tile.getBaseColor(), tile.getLightColor(), tile.getShadowColor(), x, y, g);
     }
 
-    public void drawTile(Color base, Color light, Color dark, Integer x, Integer y, Graphics g) {
+    public void drawTile(Color base, Color light, Color dark, int x, int y, Graphics g) {
         //fill tile with base color
         g.setColor(base);
         g.fillRect(x, y, BoardPanelSettings.TILE_SIZE_PIXELS, BoardPanelSettings.TILE_SIZE_PIXELS);

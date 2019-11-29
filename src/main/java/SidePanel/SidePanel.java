@@ -4,7 +4,6 @@ import BoardPanel.BoardPanelSettings;
 import Tetris.Tetris;
 import Tile.Tile;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class SidePanel extends SidePanelSettings {
@@ -30,13 +29,14 @@ public class SidePanel extends SidePanelSettings {
         g.setColor(DRAW_COLOR);
 
         //variable for handling Y position of string or element
-        Integer offset;
+        int offset;
 
         //stats info
         g.setFont(LARGE_FONT);
         g.drawString("STATS", SMALL_INSET, offset = STATS_INSET);
         g.setFont(SMALL_FONT);
         g.drawString("Level: " + tetris.getLevel(), LARGE_INSET, offset += TEXT_INSET);
+        g.drawString("Score: " + tetris.getScore(), LARGE_INSET, offset += TEXT_INSET);
 
         //controls field
         g.setFont(LARGE_FONT);
@@ -59,17 +59,17 @@ public class SidePanel extends SidePanelSettings {
         Tile tile = tetris.getNextTile();
         if(!tetris.isGameOver() && tile != null){
             //get size properties of new tile
-            Integer columns = tile.getColumns();
-            Integer rows = tile.getRows();
-            Integer dimension = tile.getDimension();
+            int columns = tile.getColumns();
+            int rows = tile.getRows();
+            int dimension = tile.getDimension();
 
             //calculate center point of starting draw process for tile
-            Integer startX = (SQUARE_CENTER_X - (columns * TILE_SIZE / 2));
-            Integer startY = (SQUARE_CENTER_Y - (rows * TILE_SIZE / 2));
+            int startX = (SQUARE_CENTER_X - (columns * TILE_SIZE / 2));
+            int startY = (SQUARE_CENTER_Y - (rows * TILE_SIZE / 2));
 
             //get insets for preview. Rotation for preview is set by default 0
-            Integer topInsert = tile.getTopInsert(0);
-            Integer leftInsert = tile.getLeftInsert(0);
+            int topInsert = tile.getTopInsert(0);
+            int leftInsert = tile.getLeftInsert(0);
 
             //loop through pieces of tile and make it appear on preview box
             for(int row = 0; row < dimension; row++)
@@ -88,7 +88,7 @@ public class SidePanel extends SidePanelSettings {
      * @param y Coordinate y for drawing
      * @param g Graphics entity
      */
-    private void drawTile(Tile tile, Integer x, Integer y, Graphics g) {
+    private void drawTile(Tile tile, int x, int y, Graphics g) {
         //Fill all element with base color
         g.setColor(tile.getBaseColor());
         g.fillRect(x, y, TILE_SIZE, TILE_SIZE);

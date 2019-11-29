@@ -8,7 +8,8 @@ import java.awt.*;
  *      The {@code Tile} shows properties of pieces that are used in game, their types and possible actions.
  */
 public enum Tile implements TileInterface {
-    TypeI(new Color(BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MAX), 4, 4, 1, new Boolean[][] {
+    TypeI(new Color(BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MAX),
+            4, 4, 1, new boolean[][] {
             {
                     false, false, false, false,
                     true,  true,  true,  true,
@@ -35,7 +36,8 @@ public enum Tile implements TileInterface {
             }
     }),
 
-    TypeJ(new Color(BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MAX), 3, 3, 2, new Boolean[][] {
+    TypeJ(new Color(BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MAX),
+            3, 3, 2, new boolean[][] {
             {
                     true,  false, false,
                     true,  true,  true,
@@ -58,7 +60,8 @@ public enum Tile implements TileInterface {
             }
     }),
 
-    TypeL(new Color(BoardPanelSettings.COLOR_MAX, 127, BoardPanelSettings.COLOR_MIN), 3, 3, 2, new Boolean[][] {
+    TypeL(new Color(BoardPanelSettings.COLOR_MAX, 127, BoardPanelSettings.COLOR_MIN),
+            3, 3, 2, new boolean[][] {
             {
                     false, false, true,
                     true,  true,  true,
@@ -81,7 +84,8 @@ public enum Tile implements TileInterface {
             }
     }),
 
-    TypeO(new Color(BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MIN), 2, 2, 2, new Boolean[][] {
+    TypeO(new Color(BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MIN),
+            2, 2, 2, new boolean[][] {
             {
                     true,  true,
                     true,  true
@@ -100,7 +104,8 @@ public enum Tile implements TileInterface {
             }
     }),
 
-    TypeS(new Color(BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MIN), 3, 3, 2, new Boolean[][] {
+    TypeS(new Color(BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MIN),
+            3, 3, 2, new boolean[][] {
             {
                     false, true,  true,
                     true,  true,  false,
@@ -123,7 +128,7 @@ public enum Tile implements TileInterface {
             }
     }),
 
-    TypeT(new Color(128, BoardPanelSettings.COLOR_MIN, 128), 3, 3, 2, new Boolean[][] {
+    TypeT(new Color(128, BoardPanelSettings.COLOR_MIN, 128), 3, 3, 2, new boolean[][] {
             {
                     false, true,  false,
                     true,  true,  true,
@@ -146,7 +151,8 @@ public enum Tile implements TileInterface {
             }
     }),
 
-    TypeZ(new Color(BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MIN), 3, 3, 2, new Boolean[][] {
+    TypeZ(new Color(BoardPanelSettings.COLOR_MAX, BoardPanelSettings.COLOR_MIN, BoardPanelSettings.COLOR_MIN),
+            3, 3, 2, new boolean[][] {
             {
                     true,  true,  false,
                     false, true,  true,
@@ -187,34 +193,34 @@ public enum Tile implements TileInterface {
     /**
      * Column that current tile spawns in
      */
-    private Integer spawnColumn;
+    private int spawnColumn;
 
     /**
      * Row that current tile spawns in
      */
-    private Integer spawnRow;
+    private int spawnRow;
 
     /**
      * Dimensions of the array for this tile
      */
-    private Integer dimension;
+    private int dimension;
 
     /**
      * Amount of rows in current tile
      */
-    private Integer rows;
+    private int rows;
 
     /**
      * Amount of rows in current tile
      */
-    private Integer columns;
+    private int columns;
 
     /**
      * Pieces of tile.
      */
-    private Boolean[][] tiles;
+    private boolean[][] tiles;
 
-    Tile(Color color, Integer dimension, Integer columns, Integer rows, Boolean[][] tiles) {
+    Tile(Color color, int dimension, int columns, int rows, boolean[][] tiles) {
         this.baseColor = color;
         this.lightColor = color.brighter();
         this.shadowColor = color.darker();
@@ -233,19 +239,19 @@ public enum Tile implements TileInterface {
 
     public Color getShadowColor() { return shadowColor; }
 
-    public Integer getDimension() { return dimension; }
+    public int getDimension() { return dimension; }
 
-    public Integer getSpawnColumn() { return spawnColumn; }
+    public int getSpawnColumn() { return spawnColumn; }
 
-    public Integer getSpawnRow() { return spawnRow; }
+    public int getSpawnRow() { return spawnRow; }
 
-    public Integer getRows() { return rows; }
+    public int getRows() { return rows; }
 
-    public Integer getColumns() { return columns; }
+    public int getColumns() { return columns; }
 
-    public Boolean isTile(Integer x, Integer y, Integer rotation) { return tiles[rotation][y * dimension + x]; }
+    public boolean isTile(int x, int y, int rotation) { return tiles[rotation][y * dimension + x]; }
 
-    public Integer getLeftInsert(Integer rotation) {
+    public int getLeftInsert(int rotation) {
         // come from left to right until program finds a tile
         for(int x = 0; x < dimension; x++)
             for(int y = 0; y < dimension; y++)
@@ -255,7 +261,7 @@ public enum Tile implements TileInterface {
         return -1;
     }
 
-    public Integer getRightInsert(Integer rotation) {
+    public int getRightInsert(int rotation) {
          // come from right to left until program finds a tile
         for(int x = dimension - 1; x >= 0; x--)
             for(int y = 0; y < dimension; y++)
@@ -265,7 +271,7 @@ public enum Tile implements TileInterface {
         return -1;
     }
 
-    public Integer getTopInsert(Integer rotation) {
+    public int getTopInsert(int rotation) {
         // loop from top to bottom until is found a tile
         for(int y = 0; y < dimension; y++)
             for(int x = 0; x < dimension; x++)
@@ -275,7 +281,7 @@ public enum Tile implements TileInterface {
         return -1;
     }
 
-    public Integer getBottomInsert(Integer rotation) {
+    public int getBottomInsert(int rotation) {
          // loop from bottom to top until is found a tile
         for(int y = dimension - 1; y >= 0; y--)
             for(int x = 0; x < dimension; x++)

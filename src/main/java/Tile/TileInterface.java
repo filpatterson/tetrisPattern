@@ -25,31 +25,31 @@ public interface TileInterface {
      * Gets dimension of tile
      * @return Dimension of tile
      */
-    Integer getDimension();
+    int getDimension();
 
     /**
      * Gets spawn column of tile
      * @return Spawn column
      */
-    Integer getSpawnColumn();
+    int getSpawnColumn();
 
     /**
      * Gets spawn row of tile
      * @return Spawn row
      */
-    Integer getSpawnRow();
+    int getSpawnRow();
 
     /**
      * Gets amount of rows in tile
      * @return Amount of rows in tile
      */
-    Integer getRows();
+    int getRows();
 
     /**
      * Gets amount of columns in tile
      * @return Amount of columns in tile
      */
-    Integer getColumns();
+    int getColumns();
 
     /**
      * Checks if chosen coordinates and rotation contain a tile
@@ -58,33 +58,33 @@ public interface TileInterface {
      * @param rotation Rotation to check in
      * @return Is there a tile
      */
-    Boolean isTile(Integer x, Integer y, Integer rotation);
+    boolean isTile(int x, int y, int rotation);
 
     /**
      * Shows amount of empty columns from the left side
      * @param rotation Rotation
      * @return Amount of free columns from the left side
      */
-    Integer getLeftInsert(Integer rotation);
+    int getLeftInsert(int rotation);
 
     /**
      * Shows amount of empty columns from the right side
      * @param rotation Rotation
      * @return Amount of free columns from the right side
      */
-    Integer getRightInsert(Integer rotation);
+    int getRightInsert(int rotation);
 
     /**
      * Shows amount of empty rows from the top
      * @param rotation Rotation
      * @return Amount of free rows from the top
      */
-    Integer getTopInsert(Integer rotation);
+    int getTopInsert(int rotation);
 
     /**
      * Shows amount of empty rows from the bottom
      * @param rotation Rotation
      * @return Amount of free rows from the bottom
      */
-    Integer getBottomInsert(Integer rotation);
+    int getBottomInsert(int rotation);
 }
