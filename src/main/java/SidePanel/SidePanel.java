@@ -57,7 +57,7 @@ public class SidePanel extends SidePanelSettings {
 
         //draw next tile in the preview box
         Tile tile = tetris.getNextTile();
-        if(tetris.isGameOver() && tile != null){
+        if(!tetris.isGameOver() && tile != null){
             //get size properties of new tile
             Integer columns = tile.getColumns();
             Integer rows = tile.getRows();
@@ -78,6 +78,7 @@ public class SidePanel extends SidePanelSettings {
                         drawTile(tile, startX + (column + leftInsert) * TILE_SIZE,
                                 startY + (row - topInsert) * TILE_SIZE, g);
         }
+
     }
 
     /**
@@ -88,6 +89,20 @@ public class SidePanel extends SidePanelSettings {
      * @param g Graphics entity
      */
     private void drawTile(Tile tile, Integer x, Integer y, Graphics g) {
+        //Fill all element with base color
+        g.setColor(tile.getBaseColor());
+        g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
+        //fill right and bottom edges with shadow color for looking like there is some light
+        g.setColor(tile.getShadowColor());
+        g.fillRect(x, y + TILE_SIZE + SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
+        g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
+
+        //fill top and left edges with some light effect color
+        g.setColor(tile.getLightColor());
+        for(int i = 0; i < SHADE_WIDTH; i++) {
+            g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + 1);
+            g.drawLine(x + i, y, x + i, y + TILE_SIZE - i - 1);
+        }
     }
 }

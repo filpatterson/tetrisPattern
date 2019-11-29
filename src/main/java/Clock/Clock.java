@@ -4,27 +4,27 @@ public class Clock implements ClockInterface {
     /**
      * Amount of milliseconds per one cycle
      */
-    private Float millisPerCycle;
+    private Float millisPerCycle = 0.0f;
 
     /**
      * The last time when the clock was updated (used for calculation of delta time)
      */
-    private Long lastUpdate;
+    private Long lastUpdate = 0L;
 
     /**
      * Amount of cycles that have elapsed and haven't been polled
      */
-    private Integer elapsedCycles;
+    private Integer elapsedCycles = 0;
 
     /**
      * Amount of time towards the next elapsed cycle
      */
-    private Float excessCycles;
+    private Float excessCycles = 0.0f;
 
     /**
      * Is game paused or not
      */
-    private Boolean isPaused;
+    private Boolean isPaused = false;
 
     public Clock(Float cyclesPerSecond){
         setCyclesPerSecond(cyclesPerSecond);

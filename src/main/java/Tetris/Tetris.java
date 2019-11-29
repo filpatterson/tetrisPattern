@@ -9,43 +9,134 @@ import java.awt.event.KeyEvent;
 import Clock.Clock;
 import java.util.Random;
 import Tile.Tile;
+import SidePanel.SidePanel;
 
-public class Tetris extends TetrisSettings implements TetrisInterface {
-    private TetrisSettings game = new Tetris();
+import javax.swing.*;
+
+public class Tetris extends JFrame implements TetrisInterface {
+    /**
+     * How many milliseconds it takes per frame
+     */
+    private static final long FRAME_TIME = 1000L / 50L;
+
+    /**
+     * Amount of tiles that there can be
+     */
+    private static final int TYPE_COUNT = Tile.values().length;
+
+    /**
+     * BoardPanel instance
+     */
+    private BoardPanelService boardPanelService;
+
+    /**
+     * SidePanelInstance
+     */
+    private SidePanel side;
+
+    /**
+     * Is game over or not
+     */
+    private boolean isGameOver;
+
+    /**
+     * Is game paused or not
+     */
+    private boolean isPaused;
+
+    /**
+     * Checks if game was played (becomes false automatically when game starts
+     */
+    private boolean isNewGame;
+
+    /**
+     * Current level of game
+     */
+    private int level;
+
+    /**
+     * Current game score
+     */
+    private int score;
+
+    /**
+     * Random number generator used to make tile spawn randomly
+     */
+    private Random random;
+
+    /**
+     * Clock that handles the update logic
+     */
+    private Clock logicTimer;
+
+    /**
+     * Current tile
+     */
+    private Tile tile = null;
+
+    /**
+     * Next tile that will appear on screen
+     */
+    private Tile nextTile = null;
+
+    /**
+     * The current row of current tile
+     */
+    private int currentRow;
+
+    /**
+     * The current col of current tile
+     */
+    private int currentColumn;
+
+    /**
+     * The current rotation of tile
+     */
+    private int currentRotation;
+
+    /**
+     * Small amount of time that passes after spawn of tile and before its drop
+     */
+    private int dropCooldown;
+
+    /**
+     * Speed of game
+     */
+    private float gameSpeed;
 
     public void startGame() {
         //initialize random number generator
-        game.setRandom(new Random());
-        game.setNewGame(true);
-        game.setGameSpeed(1.0f);
+        random = new Random();
+        isNewGame = true;
+        gameSpeed = 1.0f;
 
         //setup the timer for preventing game start before pressing Enter
-        game.setLogicTimer(new Clock(game.getGameSpeed()));
-        game.getLogicTimer().setPaused();
+        logicTimer = new Clock(gameSpeed);
+        logicTimer.setPaused(true);
 
         while(true) {
             //get the time that the frame started
-            Long start = System.nanoTime();
+            long start = System.nanoTime();
 
             //update the logic timer
-            game.getLogicTimer().update();
+            logicTimer.update();
 
             //if there came a cycle of timer then game be updated and tile can be moved down
-            if(game.getLogicTimer().hasElapsedCycle()) {
+            if(logicTimer.hasElapsedCycle()) {
                 updateGame();
             }
 
-            if(game.getDropCooldown() > 0) {
-                game.setDropCooldown(game.getDropCooldown() - 1);
+            if(dropCooldown > 0) {
+                dropCooldown--;
             }
 
             //render game
             renderGame();
 
-            Long delta = (System.nanoTime() - start) / 1000000L;
-            if(delta < getFrameTime()){
+            long delta = (System.nanoTime() - start) / 1000000L;
+            if(delta < FRAME_TIME){
                 try{
-                    Thread.sleep(getFrameTime() - delta);
+                    Thread.sleep(FRAME_TIME - delta);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -54,30 +145,28 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
     }
 
      public void updateGame(){
-        if(game.getBoardPanelService().isValidAndEmpty(game.getTile(), game.getCurrentColumn(),
-                game.getCurrentRow() + 1, game.getCurrentRotation())) {
+        if(boardPanelService.isValidAndEmpty(tile, currentColumn, currentRow + 1, currentRotation)) {
             //increment the tile down if it can be done
-            game.setCurrentRow(game.getCurrentRow() + 1);
+            currentRow++;
         } else {
             //if bottom of board is reached or landed on another piece so needs to be added new tile to the board
-            game.getBoardPanelService().addPiece(game.getTile(), game.getCurrentColumn(), game.getCurrentRow(),
-                    game.getCurrentRotation());
+            boardPanelService.addPiece(tile, currentColumn, currentRow, currentRotation);
 
             //game checks if there are cleared lines after setting tile and calculates score for player
-            Integer cleared = game.getBoardPanelService().checkLines();
+            Integer cleared = boardPanelService.checkLines();
             if(cleared > 0)
-                game.setScore(game.getScore() + 50 << cleared);
+                score = score + 50 << cleared;
 
             //we need to make game harder by slightly increasing speed of next tile and update game's timer
-            game.setGameSpeed(game.getGameSpeed() + 0.035f);
-            game.getLogicTimer().setCyclesPerSecond(game.getGameSpeed());
-            game.getLogicTimer().reset();
+            gameSpeed += 0.035f;
+            logicTimer.setCyclesPerSecond(gameSpeed);
+            logicTimer.reset();
 
             //game needs small cooldown for creating time for gamer to react over new tile and where he/she can place it
-            game.setDropCooldown(25);
+            dropCooldown = 25;
 
             //game needs visual representation of increasing difficulty and for this is used 'level'
-            game.setLevel((int)(game.getGameSpeed() * 1.7f));
+            level = (int)(gameSpeed * 1.7f);
 
             //spawn a new tile to control
             spawnTile();
@@ -85,103 +174,104 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
     }
 
      public void renderGame(){
-        game.getBoardPanelService().repaint();
-        game.getSide().repaint();
+        boardPanelService.repaint();
+        side.repaint();
     }
 
      public void resetGame(){
-        game.setLevel(1);
-        game.setScore(0);
-        game.setGameSpeed(1.0f);
-        game.setTile(Tile.values()[getRandom().nextInt(getTypeCount())]);
-        game.setNewGame(false);
-        game.setGameOver(false);
-        game.getBoardPanelService().clear();
-        game.getLogicTimer().reset();
-        game.getLogicTimer().setCyclesPerSecond(game.getGameSpeed());
+        level = 1;
+        score = 0;
+        gameSpeed = 1.0f;
+        nextTile = Tile.values()[random.nextInt(TYPE_COUNT)];
+        isNewGame = false;
+        isGameOver = false;
+        boardPanelService.clear();
+        logicTimer.reset();
+        logicTimer.setCyclesPerSecond(gameSpeed);
         spawnTile();
     }
 
      public void spawnTile(){
         //reset position and rotation for spawn of new tile, pick the next tile to work with
-        game.setTile(game.getNextTile());
-        game.setCurrentColumn(game.getTile().getSpawnColumn());
-        game.setCurrentRow(game.getTile().getSpawnRow());
-        game.setCurrentRotation(0);
-        game.setNextTile(Tile.values()[getRandom().nextInt(getTypeCount())]);
+        tile = nextTile;
+        currentColumn = tile.getSpawnColumn();
+        currentRow = tile.getSpawnRow();
+        currentRotation = 0;
+        nextTile = Tile.values()[random.nextInt(TYPE_COUNT)];
 
         //if spawn point is invalid then it means that there is no place for spawn and gamer lost
-        if(!game.getBoardPanelService().isValidAndEmpty(game.getTile(), game.getCurrentColumn(), game.getCurrentRow(), game.getCurrentRotation())){
-            game.setGameOver(true);
-            game.getLogicTimer().setPaused(true);
+        if(!boardPanelService.isValidAndEmpty(tile, currentColumn, currentRow, currentRotation)){
+            isGameOver = true;
+            logicTimer.setPaused(true);
         }
     }
 
      public void rotateTile(Integer newRotation){
         //sometimes there is need of moving tile so that it will not clip out from board
-        Integer newColumn = game.getCurrentColumn();
-        Integer newRow = game.getCurrentRow();
+        int newColumn = currentColumn;
+        int newRow = currentRow;
 
         //there is need in getting amount of free space from all sides of tile
-        Integer left = game.getTile().getLeftInsert(newRotation);
-        Integer right = game.getTile().getRightInsert(newRotation);
-        Integer bottom = game.getTile().getBottomInsert(newRotation);
-        Integer top = game.getTile().getTopInsert(newRotation);
+         int left = tile.getLeftInsert(newRotation);
+         int right = tile.getRightInsert(newRotation);
+         int top = tile.getTopInsert(newRotation);
+         int bottom = tile.getBottomInsert(newRotation);
 
         //if tile is too far right or left, then move it for evading clipping out from the game board
-        if(game.getCurrentColumn() < -left)
-            newColumn -= game.getCurrentColumn() - left;
-        else if(game.getCurrentColumn() + game.getTile().getDimension() - right > BoardPanelSettings.COL_COUNT)
-            newColumn -= (game.getCurrentColumn() + game.getTile().getDimension() - right)
-                    - BoardPanelSettings.COL_COUNT + 1;
+         if(currentColumn < -left)
+             newColumn -= currentColumn - left;
+         else if(currentColumn + tile.getDimension() - right >= BoardPanelSettings.COL_COUNT)
+             newColumn -= (currentColumn + tile.getDimension() - right) - BoardPanelSettings.COL_COUNT + 1;
 
         //if tile is too far bottom or top, then move it for evading clipping out from the game board
-        if(game.getCurrentRow() < -top)
-            newRow -= game.getCurrentRow() - top;
-        else if(game.getCurrentRow() + game.getTile().getDimension() - bottom >= BoardPanelSettings.ROW_COUNT)
-            newRow -= (game.getCurrentRow() + game.getTile().getDimension() - bottom)
-                    - BoardPanelSettings.ROW_COUNT + 1;
+         if(currentRow < -top) {
+             newRow -= currentRow - top;
+         } else if(currentRow + tile.getDimension() - bottom >= BoardPanelSettings.ROW_COUNT) {
+             newRow -= (currentRow + tile.getDimension() - bottom) - BoardPanelSettings.ROW_COUNT + 1;
+         }
 
         //check to see if new position is acceptable. If it is, then update position and rotation of piece
-        if(game.getBoardPanelService().isValidAndEmpty(game.getTile(), newColumn, newRow, newRotation)){
-            game.setCurrentRotation(newRotation);
-            game.setCurrentRow(newRow);
-            game.setCurrentColumn(newColumn);
-        }
+         if(boardPanelService.isValidAndEmpty(tile, newColumn, newRow, newRotation)) {
+             currentRotation = newRotation;
+             currentRow = newRow;
+             currentColumn = newColumn;
+         }
     }
 
-    public Boolean isPaused(){ return game.getPaused(); }
+    public Boolean isPaused(){ return isPaused; }
 
-    public Boolean isGameOver() { return game.getGameOver(); }
+    public Boolean isGameOver() { return isGameOver; }
 
-    public Boolean isNewGame() { return game.getNewGame(); }
+    public Boolean isNewGame() { return isNewGame; }
 
-    public Integer getScore() { return game.getScore(); }
+    public Integer getScore() { return score; }
 
-    public Integer getLevel() { return game.getLevel(); }
+    public Integer getLevel() { return level; }
 
-    public Tile getNextTile() { return game.getNextTile(); }
+    public Tile getNextTile() { return nextTile; }
 
-    public Integer getTileColumn() { return game.getCurrentColumn(); }
+    public Integer getTileColumn() { return currentColumn; }
 
-    public Integer getTileRow() { return game.getCurrentRow(); }
+    public Integer getTileRow() { return currentRow; }
 
-    public Integer getTileRotation() { return game.getCurrentRotation(); }
+    public Integer getTileRotation() { return currentRotation; }
+
+    public Tile getTile() { return tile; }
 
     private Tetris() {
         //set basic properties of window
-        super("Tetris");
+        super("tetris");
         setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
         //initialize BoardPanel and SidePanel
-        game.setBoardPanelService(new BoardPanelService(this));
-        game.setSide(new SidePanel(this));
+        boardPanelService = new BoardPanelService(this);
+        side = new SidePanel(this);
 
         //add BoardPanel and SidePanel instances to the window
-        add(game.getBoardPanelService(), BorderLayout.CENTER);
-        add(game.getSidePanel(), BorderLayout.EAST);
+        add(boardPanelService, BorderLayout.CENTER);
+        add(side, BorderLayout.EAST);
 
         //add keyListener for controlling game and make it all work
         addKeyListener(new KeyAdapter() {
@@ -192,51 +282,45 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
 
                     //drop tile when pressed (speeds up game timer)
                     case KeyEvent.VK_S:
-                        if(!isPaused() && game.getDropCooldown() == 0)
-                            game.getLogicTimer().setCyclesPerSecond(25.0f);
+                        if(!isPaused() && dropCooldown == 0)
+                            logicTimer.setCyclesPerSecond(25.0f);
                         break;
 
                     //move tile left if there is free space from the left side
                     case KeyEvent.VK_A:
-                        if(!isPaused() && game.getBoardPanelService().isValidAndEmpty(game.getTile(),
-                                                                                        game.getCurrentColumn() - 1,
-                                                                                        game.getCurrentRow(),
-                                                                                        game.getCurrentRotation()))
-                            game.setCurrentColumn(game.getCurrentColumn() - 1);
+                        if(!isPaused() && boardPanelService.isValidAndEmpty(tile, currentColumn - 1, currentRow, currentRotation))
+                            currentColumn = currentColumn - 1;
                         break;
 
                     //move tile right if there is free space from the right side
                     case KeyEvent.VK_D:
-                        if(!isPaused() && game.getBoardPanelService().isValidAndEmpty(game.getTile(),
-                                                                                        game.getCurrentColumn() + 1,
-                                                                                        game.getCurrentRow(),
-                                                                                        game.getCurrentRotation()))
-                            game.setCurrentColumn(game.getCurrentColumn() + 1);
+                        if(!isPaused() && boardPanelService.isValidAndEmpty(tile, currentColumn + 1, currentRow, currentRotation))
+                            currentColumn = currentColumn + 1;
                         break;
 
                     //rotate tile anticlockwise
                     case KeyEvent.VK_Q:
                         if(!isPaused())
-                            rotateTile((game.getCurrentRotation() == 0) ? 3 : game.getCurrentRotation() - 1);
+                            rotateTile((currentRotation == 0) ? 3 : currentRotation - 1);
                         break;
 
                     //rotate tile clockwise
                     case KeyEvent.VK_E:
                         if(!isPaused())
-                            rotateTile((game.getCurrentRotation() == 0) ? 3 : game.getCurrentRotation() + 1);
+                            rotateTile((currentRotation == 0) ? 3 : currentRotation + 1);
                         break;
 
                     //pause game if game is not over or not started
                     case KeyEvent.VK_P:
-                        if(!game.getGameOver() && !game.getNewGame()) {
-                            game.setPaused(!game.getPaused());
-                            getLogicTimer().setPaused(game.getPaused());
+                        if(!isGameOver && !isNewGame) {
+                            isPaused = !isPaused;
+                            logicTimer.setPaused(isPaused);
                         }
                         break;
 
                     //start game (if it is game over or new game state
                     case KeyEvent.VK_ENTER:
-                        if(game.getGameOver() || game.getNewGame())
+                        if(isGameOver || isNewGame)
                             resetGame();
                         break;
                 }
@@ -248,8 +332,8 @@ public class Tetris extends TetrisSettings implements TetrisInterface {
                     //when key is released set speed of the logic timer back to current game speed and clear cycles that
                     //might still been elapsed
                     case KeyEvent.VK_S:
-                        game.getLogicTimer().setCyclesPerSecond(game.getGameSpeed());
-                        game.getLogicTimer().reset();
+                        logicTimer.setCyclesPerSecond(gameSpeed);
+                        logicTimer.reset();
                         break;
                 }
             }
