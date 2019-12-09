@@ -317,3 +317,9 @@ public void setCyclesPerSecond(float cyclesPerSecond) { this.millisPerCycle = (1
         this.isPaused = paused;
     }
 ```
+
+*Filter Pattern*
+We apply the Filter Pattern by separating the characteristics of certain classes and methods that will be used in them from their immediate implementation.
+
+*Bridge Pattern*
+The bridge pattern is used in the Tetris class, which is a combination of all classes and acts as a link between the gameplay and the interface, using all its parts.
