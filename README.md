@@ -10,11 +10,15 @@
 
 Tetris is an aspect-oriented implementation of the well-known game.
 
-*Side Panel* - a side panel that displays the control buttons, the number of points and the level on the screen.\n
-*Clock* is responsible for the internal implementation of the clock and speeds up the flow of time with each new level. When paused, he stops time.\n
-*BoardPanel* - a panel on which the playing field is drawn, all the pieces and their fall.\n
-*Tetris* is the base. Here game logic and mechanics in action.\n
-*Tile* - pieces of what they consist of, how to show them and how they can change.\n
+*Side Panel* - a side panel that displays the control buttons, the number of points and the level on the screen.
+
+*Clock* is responsible for the internal implementation of the clock and speeds up the flow of time with each new level. When paused, he stops time.
+
+*BoardPanel* - a panel on which the playing field is drawn, all the pieces and their fall.
+
+*Tetris* is the base. Here game logic and mechanics in action.
+
+*Tile* - pieces of what they consist of, how to show them and how they can change.
 
 
 Creating and Drawing the falling piece:
