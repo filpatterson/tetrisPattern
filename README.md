@@ -324,7 +324,9 @@ We apply the Filter Pattern by separating the characteristics of certain classes
 *Bridge Pattern*
 The bridge pattern is used in the Tetris class, which is a combination of all classes and acts as a link between the gameplay and the interface, using all its parts.
 
+
 Our application:
+
 ![tetris1](https://github.com/filpatterson/tetrisPattern/blob/master/tetris1.PNG)
 
 ![tetris2](https://github.com/filpatterson/tetrisPattern/blob/master/tetris2.PNG)
