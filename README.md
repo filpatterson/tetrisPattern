@@ -37,7 +37,10 @@ A piece can be rotated 90˚ counter-clockwise to yield another piece. Enough rot
 you back to the original piece — for example rotating a dog twice brings you back to the
 original state. Essentially, each tetris piece belongs to a family of between one and four
 distinct rotations. The square has one, the dogs have two, and the L's have four. For
-example, here are the four rotations (going counter-clockwise) of the left hand L.
+example, here are the four rotations (going counter-clockwise) of the left hand L:
+
+
+![tetris3](https://github.com/filpatterson/tetrisPattern/blob/master/tetris3.PNG)
 
 
 _Creating and drawing the board:_
